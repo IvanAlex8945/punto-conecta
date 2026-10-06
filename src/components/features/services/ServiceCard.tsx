@@ -23,36 +23,36 @@ interface ServiceTheme {
 
 const SERVICE_THEMES: Record<string, ServiceTheme> = {
   gaming: {
-    accentColor: '#a855f7', // Morado gaming
-    borderColorActive: 'rgba(168, 85, 247, 0.7)',
-    glowShadow: '0 24px 38px -6px rgba(0, 0, 0, 0.95), 0 0 20px -3px rgba(168, 85, 247, 0.25)',
+    accentColor: '#a855f7',
+    borderColorActive: 'rgba(168, 85, 247, 0.75)',
+    glowShadow: '0 24px 38px -6px rgba(0, 0, 0, 0.95), 0 0 22px -3px rgba(168, 85, 247, 0.28)',
     categoryColor: 'text-purple-400',
     tagClass: 'border-purple-500/30 text-purple-300 bg-purple-950/40',
   },
   police: {
-    accentColor: '#3b82f6', // Azul táctico
-    borderColorActive: 'rgba(59, 130, 246, 0.7)',
-    glowShadow: '0 24px 38px -6px rgba(0, 0, 0, 0.95), 0 0 20px -3px rgba(59, 130, 246, 0.25)',
+    accentColor: '#3b82f6',
+    borderColorActive: 'rgba(59, 130, 246, 0.75)',
+    glowShadow: '0 24px 38px -6px rgba(0, 0, 0, 0.95), 0 0 22px -3px rgba(59, 130, 246, 0.28)',
     categoryColor: 'text-blue-400',
     tagClass: 'border-blue-500/30 text-blue-300 bg-blue-950/40',
   },
   sports: {
-    accentColor: '#f97316', // Naranja básquetbol
-    borderColorActive: 'rgba(249, 115, 22, 0.7)',
-    glowShadow: '0 24px 38px -6px rgba(0, 0, 0, 0.95), 0 0 20px -3px rgba(249, 115, 22, 0.25)',
+    accentColor: '#f97316',
+    borderColorActive: 'rgba(249, 115, 22, 0.75)',
+    glowShadow: '0 24px 38px -6px rgba(0, 0, 0, 0.95), 0 0 22px -3px rgba(249, 115, 22, 0.28)',
     categoryColor: 'text-orange-400',
     tagClass: 'border-orange-500/30 text-orange-300 bg-orange-950/40',
   },
 };
 
 /**
- * [SKILL: Out of Bounds 3D Service Card]
- * Tarjeta interactiva sin caja interior. Los íconos 3D tienen posicionamiento absoluto
- * y sobresalen fuera del borde superior izquierdo, con levitación constante.
- * Título con relieve 3D apilado en text-shadow que se presiona al interactuar.
+ * [SKILL: Out of Bounds Service Card with Intentional Tactile Click Delay]
+ * Íconos 3D con animaciones ambientales infinitas por defecto rompiendo la caja.
+ * Manejo de clic controlado (400ms de impacto visual táctil antes de abrir en nueva pestaña).
  */
 export const ServiceCard: React.FC<ServiceCardProps> = ({ service, index }) => {
   const [isActive, setIsActive] = useState<boolean>(false);
+  const [isPressed, setIsPressed] = useState<boolean>(false);
 
   const theme = SERVICE_THEMES[service.id] || {
     accentColor: '#ffffff',
@@ -72,7 +72,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, index }) => {
   const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['5deg', '-5deg']);
   const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-5deg', '5deg']);
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
     x.set((e.clientX - rect.left) / rect.width - 0.5);
     y.set((e.clientY - rect.top) / rect.height - 0.5);
@@ -84,15 +84,30 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, index }) => {
     setIsActive(false);
   };
 
-  // Renderizado del ícono fuera de la caja
+  // EXPERIENCIA DE CLIC: Retardo intencional de 400ms para impacto táctil (Sin doble clic)
+  const handleCardClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (isPressed) return;
+
+    setIsPressed(true);
+    setIsActive(true);
+
+    // Ejecuta la animación de impacto táctil y espera 400ms antes de la redirección
+    setTimeout(() => {
+      window.open(service.url, '_blank', 'noopener,noreferrer');
+      setIsPressed(false);
+    }, 400);
+  };
+
+  // Renderizado del ícono 3D fuera de la caja
   const renderOutOfBoundsIcon = () => {
     switch (service.iconName) {
       case 'gamepad':
-        return <GamerController3D isActive={isActive} />;
+        return <GamerController3D isActive={isActive || isPressed} />;
       case 'shield':
-        return <TacticalShield3D isActive={isActive} />;
+        return <TacticalShield3D isActive={isActive || isPressed} />;
       case 'basketball':
-        return <Basketball3D isActive={isActive} />;
+        return <Basketball3D isActive={isActive || isPressed} />;
       default:
         return null;
     }
@@ -110,33 +125,39 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, index }) => {
       style={{ perspective: 900 }}
       className="relative w-full overflow-visible pt-4"
     >
-      <motion.a
-        href={service.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        style={{
-          rotateX,
-          rotateY,
-          transformStyle: 'preserve-3d',
-          borderColor: isActive ? theme.borderColorActive : 'rgba(255, 255, 255, 0.1)',
-          boxShadow: isActive
-            ? theme.glowShadow
-            : '0 20px 36px -8px rgba(0, 0, 0, 0.95), 0 8px 14px -4px rgba(0, 0, 0, 0.9)',
+      <motion.div
+        role="link"
+        tabIndex={0}
+        onClick={handleCardClick}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            handleCardClick(e as unknown as React.MouseEvent);
+          }
         }}
         onMouseMove={handleMouseMove}
         onMouseEnter={() => setIsActive(true)}
         onMouseLeave={handleMouseLeave}
-        onTouchStart={() => setIsActive(true)}
-        onTouchEnd={() => setTimeout(() => setIsActive(false), 900)}
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: 'preserve-3d',
+          borderColor: isActive || isPressed ? theme.borderColorActive : 'rgba(255, 255, 255, 0.1)',
+          boxShadow: isActive || isPressed
+            ? theme.glowShadow
+            : '0 20px 36px -8px rgba(0, 0, 0, 0.95), 0 8px 14px -4px rgba(0, 0, 0, 0.9)',
+        }}
+        animate={
+          isPressed
+            ? { scale: 0.95, y: 3 }
+            : { scale: 1, y: 0 }
+        }
         whileHover={{ scale: 1.012, y: -2 }}
-        whileTap={{ scale: 0.98 }}
-        transition={{ duration: 0.3, ease: 'easeOut' }}
-        className="group relative block w-full rounded-2xl bg-[#111111] border transition-colors duration-300 cursor-pointer select-none overflow-visible p-5 pl-20 sm:pl-24"
+        whileTap={{ scale: 0.95 }}
+        transition={{ duration: 0.2, ease: 'easeOut' }}
+        className="group relative block w-full rounded-2xl bg-[#111111] border transition-colors duration-300 cursor-pointer select-none overflow-visible p-5 pl-20 sm:pl-24 outline-none focus-visible:ring-2 focus-visible:ring-white/20"
       >
-        {/* ELEMENTO OUT OF BOUNDS: Ícono flotante 3D suspendido rompiendo la esquina superior izquierda */}
-        <div
-          className="absolute -top-7 -left-3 sm:-top-8 sm:-left-5 z-20 pointer-events-none"
-        >
+        {/* ELEMENTO OUT OF BOUNDS: Ícono flotante 3D suspendido con animación ambiental infinita */}
+        <div className="absolute -top-7 -left-3 sm:-top-8 sm:-left-5 z-20 pointer-events-none">
           {renderOutOfBoundsIcon()}
         </div>
 
@@ -170,10 +191,16 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, index }) => {
             {/* Título con Efecto de Relieve 3D Flotante apilado en text-shadow */}
             <motion.h3
               animate={
-                isActive
+                isPressed
                   ? {
-                      x: 1.5,
-                      y: 1.5,
+                      x: 2,
+                      y: 2,
+                      transition: { duration: 0.1 },
+                    }
+                  : isActive
+                  ? {
+                      x: 1.2,
+                      y: 1.2,
                       transition: { duration: 0.15 },
                     }
                   : {
@@ -183,7 +210,9 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, index }) => {
                     }
               }
               style={{
-                textShadow: isActive
+                textShadow: isPressed
+                  ? '1px 1px 0px #18181b, 1px 1px 0px #09090b, 1px 2px 3px rgba(0,0,0,0.95)'
+                  : isActive
                   ? '1px 1px 0px #1c1c1f, 1.5px 1.5px 0px #09090b, 2px 3px 5px rgba(0,0,0,0.95)'
                   : '1px 1px 0px #27272a, 2px 2px 0px #18181b, 3px 3px 0px #09090b, 4px 5px 8px rgba(0,0,0,0.9)',
               }}
@@ -202,26 +231,35 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, index }) => {
           <div className="flex-shrink-0 flex items-center justify-center">
             <motion.div
               animate={
-                isActive
+                isPressed
                   ? {
+                      scale: 0.9,
+                      backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                      borderColor: theme.borderColorActive,
+                      color: '#ffffff',
+                    }
+                  : isActive
+                  ? {
+                      scale: 1.05,
                       backgroundColor: 'rgba(255, 255, 255, 0.1)',
                       borderColor: theme.borderColorActive,
                       color: '#ffffff',
                     }
                   : {
+                      scale: 1,
                       backgroundColor: 'rgba(24, 24, 27, 0.8)',
                       borderColor: 'rgba(255, 255, 255, 0.1)',
                       color: 'rgba(161, 161, 170, 1)',
                     }
               }
-              transition={{ duration: 0.3 }}
+              transition={{ duration: 0.2 }}
               className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl border flex items-center justify-center"
             >
               <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </motion.div>
           </div>
         </div>
-      </motion.a>
+      </motion.div>
     </motion.div>
   );
 };

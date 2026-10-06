@@ -148,17 +148,20 @@ punto-conecta/
 - Copiado seguro de la CLABE al portapapeles con fallback para navegadores móviles restringidos.
 - Genera el enlace directo a la API de WhatsApp con mensaje precodificado.
 
-### 5.2 Skill: `/components/features/services/ServiceCard.tsx` (Out of Bounds UI & Text Relieve 3D)
-- **Diseño Out of Bounds:** Se eliminaron los contenedores cuadrados interiores. Los íconos 3D (+40% de tamaño) tienen `position: absolute` y sobresalen del borde superior izquierdo (`-top-7 -left-3 sm:-top-8 sm:-left-5`), con `overflow-visible` y levitación constante.
-- **Texto 3D Flotante con Presión Mecánica:** Los títulos usan capas sólidas apiladas de `text-shadow` hacia abajo a la derecha (`1px 1px 0 #27272a, 2px 2px 0 #18181b, 3px 3px 0 #09090b, 4px 5px 8px rgba(0,0,0,0.9)`). Al interactuar (`:hover` o `whileTap`), el texto se comprime físicamente (`translate(1.5px, 1.5px)` y sombra compacta) simulando la presión de una tecla o botón 3D.
-- **Físicas Pseudo-3D:**
-  - **Tarjeta 1 (Zona Gamer):** Levitación Y constante, rotación Z rápida tipo volante (-16° a 16°) y sombra neón morada inferior.
-  - **Tarjeta 2 (Equipamiento Policial):** Levitación Y, escala frontal a 1.15x y barrido de destello de luz metálica (*Shine/Glint*).
-  - **Tarjeta 3 (Deportes / Básquetbol):** Levitación Y, rotación continua y rebote gravitatorio con deformación física *Squash & Stretch* (`scaleY: 0.8`, `scaleX: 1.14`).
+### 5.2 Skill: `/components/features/services/ServiceCard.tsx` (Out of Bounds UI & Retardo Intencional)
+- **Diseño Out of Bounds:** Se eliminaron los contenedores cuadrados interiores. Los íconos 3D (+40% de tamaño) tienen `position: absolute` y sobresalen del borde superior izquierdo (`-top-7 -left-3 sm:-top-8 sm:-left-5`), con `overflow-visible` y animaciones ambientales infinitas.
+- **Animaciones Ambientales Infinitas por Defecto:** Los íconos 3D ejecutan sus animaciones continuas en bucle infinito desde que montan (`repeat: Infinity`):
+  - **Zona Gamer:** Levitación senoidal en Y (`y: [-6, 6, -6]`) y pulso de neón morado continuo.
+  - **Equipamiento Policial:** Levitación en Y y barrido de destello de luz (*Shine/Glint*) periódico cada 3.6s.
+  - **Básquetbol:** Rebote gravitatorio constante con deformación *Squash & Stretch* (`scaleY: 0.78`, `scaleX: 1.15`) y giro continuo de 360°.
+- **Texto 3D Flotante con Presión Mecánica:** Capas sólidas apiladas de `text-shadow`. Al interactuar, el texto se comprime físicamente (`translate(2px, 2px)`).
+- **Experiencia de Clic con Retardo Intencional (400ms):**
+  - Previene doble clic y fallas de navegación móvil.
+  - Al pulsar (`whileTap={{ scale: 0.95 }}`), se ejecuta `e.preventDefault()`, se activa la animación de impacto físico por 400ms y posteriormente se ejecuta `window.open(url, '_blank')`.
 
-### 5.3 Skill: `/components/features/wifi/WifiSignal3D.tsx` (Starlink Sequential Search)
-- SVG multicapa dividido en punto base y 3 ondas concéntricas.
-- Animación secuencial en bucle que incrementa la opacidad de 0.2 a 1.0 (Punto -> Onda 1 -> Onda 2 -> Onda 3) simulando la irradiación y búsqueda del satélite Starlink.
+### 5.3 Skill: `/components/features/wifi/WifiIcon3D.tsx` & `WifiHeroCard.tsx` (Wi-Fi Out of Bounds 3D)
+- Ícono Wi-Fi estilo Claymorphic 3D en posición `absolute -top-7 -left-3 sm:-top-8 sm:-left-5` rompiendo el contenedor principal.
+- Animación secuencial infinita "Buscando señal Starlink" que enciende cíclicamente las ondas (Punto -> Onda 1 -> Onda 2 -> Onda 3) en bucle perpetuo con pulso cian/esmeralda.
 
 ### 5.4 Skill: `/context/ProjectContext.tsx`
 - Distribuye la memoria del proyecto a todos los componentes hijos sin prop drilling.

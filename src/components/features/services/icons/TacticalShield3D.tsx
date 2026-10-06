@@ -2,55 +2,74 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 interface TacticalShield3DProps {
-  isActive: boolean;
+  isActive?: boolean;
   className?: string;
 }
 
+/**
+ * [SKILL: 3D Tactical Shield - Infinite Ambient Glint & Float]
+ * Aspecto metálico con levitación infinita y destello de luz (Shine/Glint)
+ * que barre periódicamente en bucle infinito desde que el componente monta.
+ */
 export const TacticalShield3D: React.FC<TacticalShield3DProps> = ({
-  isActive,
+  isActive = false,
   className = "w-20 h-20 sm:w-22 sm:h-22",
 }) => {
   return (
     <div className={`relative flex items-center justify-center select-none ${className}`}>
-      {/* Sombra de profundidad táctica en la base */}
+      {/* Sombra de profundidad táctica con pulso infinito */}
       <motion.div
         animate={
           isActive
             ? {
-                opacity: 0.8,
-                scale: 1.25,
+                opacity: 0.9,
+                scale: 1.35,
                 filter: 'blur(10px)',
               }
             : {
-                opacity: 0.35,
-                scale: 1,
-                filter: 'blur(6px)',
+                opacity: [0.3, 0.7, 0.3],
+                scale: [0.95, 1.2, 0.95],
+                filter: ['blur(5px)', 'blur(8px)', 'blur(5px)'],
               }
         }
-        transition={{ duration: 0.3 }}
+        transition={
+          isActive
+            ? { duration: 0.25 }
+            : {
+                repeat: Infinity,
+                repeatType: 'mirror',
+                duration: 2.2,
+                ease: 'easeInOut',
+              }
+        }
         className="absolute -bottom-2 w-14 h-4 bg-blue-600 rounded-full pointer-events-none"
       />
 
-      {/* Contenedor del escudo con levitación constante y escala frontal interactiva */}
+      {/* Contenedor del escudo con levitación continua */}
       <motion.div
         animate={
           isActive
             ? {
                 scale: 1.15,
                 y: -6,
-                transition: { duration: 0.28, ease: [0.34, 1.56, 0.64, 1] },
+                transition: { duration: 0.25, ease: [0.34, 1.56, 0.64, 1] },
               }
             : {
                 scale: 1,
-                y: [-3.5, 3.5, -3.5],
-                transition: {
-                  y: {
-                    repeat: Infinity,
-                    duration: 3.6,
-                    ease: 'easeInOut',
-                  },
-                  scale: { duration: 0.3 },
+                y: [-4, 4, -4],
+              }
+        }
+        transition={
+          isActive
+            ? undefined
+            : {
+                y: {
+                  repeat: Infinity,
+                  repeatType: 'mirror',
+                  duration: 2.2,
+                  ease: 'easeInOut',
                 },
+                scale: { duration: 0.3 },
               }
         }
         className="relative w-full h-full flex items-center justify-center filter drop-shadow-[0_14px_20px_rgba(0,0,0,0.95)] drop-shadow-[0_4px_6px_rgba(0,0,0,0.85)]"
@@ -63,7 +82,6 @@ export const TacticalShield3D: React.FC<TacticalShield3DProps> = ({
             xmlns="http://www.w3.org/2000/svg"
           >
             <defs>
-              {/* Gradiente metálico plateado / acero cromado */}
               <linearGradient id="shieldChromeOuter" x1="6" y1="4" x2="46" y2="52" gradientUnits="userSpaceOnUse">
                 <stop offset="0%" stopColor="#ffffff" />
                 <stop offset="25%" stopColor="#cbd5e1" />
@@ -72,14 +90,12 @@ export const TacticalShield3D: React.FC<TacticalShield3DProps> = ({
                 <stop offset="100%" stopColor="#334155" />
               </linearGradient>
 
-              {/* Gradiente de acero táctico interior */}
               <linearGradient id="shieldSteelInner" x1="12" y1="8" x2="40" y2="46" gradientUnits="userSpaceOnUse">
                 <stop offset="0%" stopColor="#1e293b" />
                 <stop offset="40%" stopColor="#0f172a" />
                 <stop offset="100%" stopColor="#020617" />
               </linearGradient>
 
-              {/* Gradiente para la estrella policial */}
               <linearGradient id="starMetalGrad" x1="26" y1="18" x2="26" y2="34" gradientUnits="userSpaceOnUse">
                 <stop offset="0%" stopColor="#ffffff" />
                 <stop offset="45%" stopColor="#93c5fd" />
@@ -122,7 +138,7 @@ export const TacticalShield3D: React.FC<TacticalShield3DProps> = ({
               fillOpacity="0.06"
             />
 
-            {/* Capa 6: Estrella / Insignia policial de alto relieve */}
+            {/* Capa 6: Estrella policial de alto relieve */}
             <path
               d="M26 18L28.2 23.5L34 23.9L29.5 27.8L30.9 33.5L26 30.5L21.1 33.5L22.5 27.8L18 23.9L23.8 23.5L26 18Z"
               fill="url(#starMetalGrad)"
@@ -133,12 +149,12 @@ export const TacticalShield3D: React.FC<TacticalShield3DProps> = ({
 
             <circle cx="26" cy="26" r="2.2" fill="#ffffff" opacity="0.95" />
 
-            {/* Remaches de acero en las esquinas */}
+            {/* Remaches de acero en esquinas */}
             <circle cx="14" cy="14" r="1.3" fill="#cbd5e1" stroke="#475569" strokeWidth="0.5" />
             <circle cx="38" cy="14" r="1.3" fill="#cbd5e1" stroke="#475569" strokeWidth="0.5" />
           </svg>
 
-          {/* EFECTO DE BARRIDO DE LUZ (SHINE / GLINT EFFECT) */}
+          {/* EFECTO DE BARRIDO DE LUZ (SHINE / GLINT) PERIÓDICO INFINITO */}
           <div
             className="absolute inset-0 overflow-hidden pointer-events-none rounded-[12px]"
             style={{
@@ -146,20 +162,16 @@ export const TacticalShield3D: React.FC<TacticalShield3DProps> = ({
             }}
           >
             <motion.div
-              animate={
-                isActive
-                  ? {
-                      left: ['-100%', '135%'],
-                      transition: {
-                        duration: 0.65,
-                        ease: 'easeInOut',
-                      },
-                    }
-                  : {
-                      left: '-100%',
-                    }
-              }
-              className="absolute top-0 bottom-0 w-10 -skew-x-[25deg] bg-gradient-to-r from-transparent via-white/55 to-transparent"
+              animate={{
+                left: ['-110%', '140%'],
+              }}
+              transition={{
+                repeat: Infinity,
+                duration: 2.0,
+                repeatDelay: 1.6,
+                ease: 'easeInOut',
+              }}
+              className="absolute top-0 bottom-0 w-10 -skew-x-[25deg] bg-gradient-to-r from-transparent via-white/60 to-transparent"
               style={{
                 filter: 'blur(2px)',
               }}

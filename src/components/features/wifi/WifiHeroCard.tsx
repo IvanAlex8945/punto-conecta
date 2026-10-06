@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Zap, ArrowRight } from '@/components/ui/Icons';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { useProjectMemory } from '@/context/ProjectContext';
-import { WifiSignal3D } from './WifiSignal3D';
+import { WifiIcon3D } from './WifiIcon3D';
 
 interface WifiHeroCardProps {
   onOpenModal: () => void;
@@ -13,65 +13,78 @@ interface WifiHeroCardProps {
 export const WifiHeroCard: React.FC<WifiHeroCardProps> = ({ onOpenModal }) => {
   const { memory } = useProjectMemory();
   const { wifiHero } = memory;
+  const [isPressed, setIsPressed] = useState(false);
+
+  const handleCtaClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsPressed(true);
+
+    // Retardo intencional de 350ms para retroalimentación táctil antes de desplegar modal
+    setTimeout(() => {
+      onOpenModal();
+      setIsPressed(false);
+    }, 350);
+  };
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="w-full"
+      transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
+      className="relative w-full overflow-visible pt-4"
     >
-      <div className="relative group rounded-3xl bg-[#111111] border border-white/10 hover:border-white/20 transition-all duration-300 p-6 sm:p-7 shadow-[0_22px_40px_-10px_rgba(0,0,0,0.95),0_8px_16px_-4px_rgba(0,0,0,0.85)] overflow-hidden">
-        {/* Subtle corner indicator */}
-        <div className="absolute top-0 right-0 w-24 h-24 pointer-events-none opacity-20">
-          <div className="absolute top-4 right-4 w-12 h-12 border-t-2 border-r-2 border-zinc-600 rounded-tr-xl" />
+      <motion.div
+        animate={isPressed ? { scale: 0.98, y: 2 } : { scale: 1, y: 0 }}
+        transition={{ duration: 0.15 }}
+        className="relative group rounded-3xl bg-[#111111] border border-white/10 hover:border-cyan-500/50 transition-all duration-300 p-6 sm:p-7 shadow-[0_24px_45px_-10px_rgba(0,0,0,0.98),0_8px_18px_-4px_rgba(0,0,0,0.9)] overflow-visible"
+      >
+        {/* ELEMENTO OUT OF BOUNDS: Ícono Wi-Fi 3D flotando fuera de la caja */}
+        <div className="absolute -top-7 -left-3 sm:-top-8 sm:-left-5 z-20 pointer-events-none">
+          <WifiIcon3D />
         </div>
 
-        {/* Top Badges / Status Bar */}
-        <div className="flex items-center justify-between mb-5 flex-wrap gap-2">
+        {/* Resplandor sutil satelital en la esquina */}
+        <div
+          className="absolute -top-12 -right-12 w-36 h-36 rounded-full pointer-events-none opacity-10 group-hover:opacity-20 transition-opacity duration-300"
+          style={{
+            background: 'radial-gradient(circle, #38bdf8 0%, transparent 70%)',
+          }}
+        />
+
+        {/* Top Badges / Status Bar (con margen izquierdo para el ícono Out of Bounds) */}
+        <div className="flex items-center justify-between mb-4 flex-wrap gap-2 pl-16 sm:pl-20">
           {/* Badge Satelital Starlink */}
-          <Badge dot={true} className="bg-black/60 border-white/10">
-            <span className="tracking-wide text-zinc-200">{wifiHero.badge}</span>
+          <Badge dot={true} className="bg-black/80 border-cyan-500/30 text-cyan-300">
+            <span className="tracking-wide text-[11px] font-mono">{wifiHero.badge}</span>
           </Badge>
 
           {/* Speed Indicator */}
           <div className="inline-flex items-center space-x-1.5 text-xs text-zinc-400 font-mono">
-            <Zap className="w-3.5 h-3.5 text-zinc-300" />
-            <span>{wifiHero.speedIndicator}</span>
+            <Zap className="w-3.5 h-3.5 text-cyan-400" />
+            <span className="text-zinc-300">{wifiHero.speedIndicator}</span>
           </div>
         </div>
 
-        {/* Main Icon & Title Area */}
-        <div className="flex items-start space-x-4 mb-4">
-          {/* Contenedor del ícono Wi-Fi con animación secuencial 3D */}
-          <motion.div
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="flex-shrink-0 w-14 h-14 rounded-2xl bg-black/80 border border-white/10 flex items-center justify-center shadow-[0_6px_14px_-2px_rgba(0,0,0,0.9)]"
+        {/* Main Title Area (con padding para no chocar con el ícono flotante) */}
+        <div className="pl-16 sm:pl-20 mb-4">
+          <h2
+            className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-tight"
+            style={{
+              textShadow: '1px 1px 0px #27272a, 2px 2px 0px #18181b, 3px 3px 0px #09090b, 4px 5px 8px rgba(0,0,0,0.9)',
+            }}
           >
-            <WifiSignal3D size={32} />
-          </motion.div>
-
-          <div className="flex-1">
-            <h2
-              className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight leading-tight"
-              style={{
-                textShadow: '1px 1px 0px #27272a, 2px 2px 0px #18181b, 3px 4px 6px rgba(0,0,0,0.9)',
-              }}
-            >
-              {wifiHero.title}
-            </h2>
-            <p className="mt-1 text-sm sm:text-base text-zinc-300 font-medium">
-              {wifiHero.subtitle}
-            </p>
-          </div>
+            {wifiHero.title}
+          </h2>
+          <p className="mt-1 text-sm sm:text-base text-zinc-300 font-medium">
+            {wifiHero.subtitle}
+          </p>
         </div>
 
         {/* Specs highlights */}
         <div className="grid grid-cols-3 gap-2 py-3.5 my-4 border-y border-white/5 text-center">
           <div className="px-2 py-1.5 bg-black/70 rounded-xl border border-white/5">
             <div className="text-[11px] text-zinc-400 uppercase tracking-wider font-semibold">Latencia</div>
-            <div className="text-xs font-mono font-bold text-zinc-200 mt-0.5">&lt; 35 ms</div>
+            <div className="text-xs font-mono font-bold text-cyan-300 mt-0.5">&lt; 35 ms</div>
           </div>
           <div className="px-2 py-1.5 bg-black/70 rounded-xl border border-white/5">
             <div className="text-[11px] text-zinc-400 uppercase tracking-wider font-semibold">Vigencia</div>
@@ -93,18 +106,18 @@ export const WifiHeroCard: React.FC<WifiHeroCardProps> = ({ onOpenModal }) => {
             </div>
           </div>
 
-          {/* Botón Obtener Clave */}
+          {/* Botón Obtener Clave con respuesta háptica controlada */}
           <Button
             variant="primary"
             size="lg"
-            onClick={onOpenModal}
+            onClick={handleCtaClick}
             className="flex-1 max-w-[200px]"
           >
             <span>{wifiHero.ctaText}</span>
             <ArrowRight className="w-4 h-4 stroke-[2.5]" />
           </Button>
         </div>
-      </div>
+      </motion.div>
     </motion.section>
   );
 };
