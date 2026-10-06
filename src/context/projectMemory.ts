@@ -2,7 +2,7 @@ import { ProjectMemory } from './types';
 
 /**
  * Fuente de Verdad y Memoria Inicial del Proyecto.
- * Sincronizado con project-context.md para persistencia y referencia de agentes.
+ * Sincronizado con project-context.md con los datos reales de Mercado Pago SPEI.
  */
 export const INITIAL_PROJECT_MEMORY: ProjectMemory = {
   name: "Punto Conecta",
@@ -20,12 +20,12 @@ export const INITIAL_PROJECT_MEMORY: ProjectMemory = {
   },
 
   paymentModal: {
-    clabe: "012 610 015489723456",
-    bankName: "BBVA México",
-    beneficiary: "Centro Digital Nochixtlán",
-    amount: "$50.00 MXN",
-    whatsappPhone: "529511234567",
-    whatsappMessage: "Hola, acabo de transferir $50 para solicitar la clave de Wi-Fi de alta velocidad en Punto Conecta.",
+    clabe: "722969014122996481",
+    bankName: "Mercado Pago",
+    beneficiary: "Ivan Ulises Alexandres Reyes",
+    amount: "$50 MXN",
+    whatsappPhone: "529511198303",
+    whatsappMessage: "Hola, ya transferí los $50 pesos a Mercado Pago para el Wi-Fi. Aquí está mi comprobante.",
     counterNotice: "Pago en efectivo disponible en mostrador",
   },
 

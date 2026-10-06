@@ -62,11 +62,12 @@
 | `service-sports` | Deportes Locales | "Liga Municipal de Básquetbol" | Balón SVG (`/assets/basketball.svg`) | `https://liga-nochixtlan-js.vercel.app/` |
 
 ### 3.2 Datos de Configuración de Pagos y Contacto (En `/src/context`)
-- **Tarifa Wi-Fi:** `$50 MXN` (Acceso ilimitado todo el día).
-- **CLABE Interbancaria por Defecto:** `012 610 015489723456`.
-- **Banco / Titular:** `BBVA / Centro Digital Nochixtlán`.
-- **WhatsApp Oficial:** `+52 951 123 4567` (Mensaje: *"Hola, acabo de transferir $50 para solicitar la clave de Wi-Fi de alta velocidad en Punto Conecta"*).
-- **Alternativa Física:** *"Pago en efectivo disponible en mostrador."*
+- **Tarifa Wi-Fi:** `$50 MXN` (Acceso ilimitado por 24 horas).
+- **CLABE Interbancaria SPEI:** `722969014122996481`.
+- **Banco:** `Mercado Pago`.
+- **Beneficiario:** `Ivan Ulises Alexandres Reyes`.
+- **WhatsApp Oficial de Validación:** `+52 951 119 8303` (URL: `https://wa.me/529511198303?text=Hola%2C%20ya%20transfer%C3%AD%20los%20%2450%20pesos%20a%20Mercado%20Pago%20para%20el%20Wi-Fi.%20Aqu%C3%AD%20est%C3%A1%20mi%20comprobante.`).
+- **Alternativa Física:** *"Pago en efectivo disponible directamente en mostrador."*
 
 ---
 
