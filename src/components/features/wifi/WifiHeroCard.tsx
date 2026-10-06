@@ -1,14 +1,17 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Wifi, Zap, ArrowRight } from '../ui/Icons';
-import { SITE_CONFIG } from '../../config/siteConfig';
+import { Wifi, Zap, ArrowRight } from '@/components/ui/Icons';
+import { Button } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/Badge';
+import { useProjectMemory } from '@/context/ProjectContext';
 
 interface WifiHeroCardProps {
   onOpenModal: () => void;
 }
 
 export const WifiHeroCard: React.FC<WifiHeroCardProps> = ({ onOpenModal }) => {
-  const { wifiHero } = SITE_CONFIG;
+  const { memory } = useProjectMemory();
+  const { wifiHero } = memory;
 
   return (
     <motion.section
@@ -17,9 +20,7 @@ export const WifiHeroCard: React.FC<WifiHeroCardProps> = ({ onOpenModal }) => {
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       className="w-full"
     >
-      <div
-        className="relative group rounded-3xl bg-zinc-950 border border-zinc-800 hover:border-zinc-700 transition-all duration-300 p-6 sm:p-7 shadow-matte-md overflow-hidden"
-      >
+      <div className="relative group rounded-3xl bg-zinc-950 border border-zinc-800 hover:border-zinc-700 transition-all duration-300 p-6 sm:p-7 shadow-matte-md overflow-hidden">
         {/* Subtle Matte corner indicator */}
         <div className="absolute top-0 right-0 w-24 h-24 pointer-events-none opacity-20">
           <div className="absolute top-4 right-4 w-12 h-12 border-t-2 border-r-2 border-zinc-700 rounded-tr-xl" />
@@ -28,12 +29,9 @@ export const WifiHeroCard: React.FC<WifiHeroCardProps> = ({ onOpenModal }) => {
         {/* Top Badges / Status Bar */}
         <div className="flex items-center justify-between mb-5 flex-wrap gap-2">
           {/* Badge Satelital Starlink */}
-          <div className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-full bg-zinc-900 border border-zinc-800 text-xs font-medium text-zinc-300">
-            <span className="relative flex h-2 w-2">
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
-            </span>
+          <Badge dot={true}>
             <span className="tracking-wide">{wifiHero.badge}</span>
-          </div>
+          </Badge>
 
           {/* Speed Indicator */}
           <div className="inline-flex items-center space-x-1.5 text-xs text-zinc-400 font-mono">
@@ -62,7 +60,7 @@ export const WifiHeroCard: React.FC<WifiHeroCardProps> = ({ onOpenModal }) => {
           </div>
         </div>
 
-        {/* Specs highlights (Ultra clean vector chips) */}
+        {/* Specs highlights */}
         <div className="grid grid-cols-3 gap-2 py-3.5 my-4 border-y border-zinc-900/90 text-center">
           <div className="px-2 py-1 bg-black/60 rounded-xl border border-zinc-900">
             <div className="text-[11px] text-zinc-500 uppercase tracking-wider font-semibold">Latencia</div>
@@ -89,15 +87,15 @@ export const WifiHeroCard: React.FC<WifiHeroCardProps> = ({ onOpenModal }) => {
           </div>
 
           {/* Botón Obtener Clave */}
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.97 }}
+          <Button
+            variant="primary"
+            size="lg"
             onClick={onOpenModal}
-            className="flex-1 max-w-[200px] inline-flex items-center justify-center space-x-2 py-3 px-5 rounded-2xl bg-white text-black font-bold text-sm tracking-tight hover:bg-zinc-200 transition-all duration-150 shadow-sm"
+            className="flex-1 max-w-[200px]"
           >
             <span>{wifiHero.ctaText}</span>
             <ArrowRight className="w-4 h-4 stroke-[2.5]" />
-          </motion.button>
+          </Button>
         </div>
       </div>
     </motion.section>

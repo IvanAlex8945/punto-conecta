@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { ServiceItem } from '../../config/siteConfig';
+import { motion } from 'framer-motion';
+import { ServiceItem } from '@/context/types';
 import {
   Gamepad2,
   ShieldCheck,
   BasketballIcon,
   ExternalLink,
-} from '../ui/Icons';
+} from '@/components/ui/Icons';
+import { Card } from '@/components/ui/Card';
 
 interface ServiceCardProps {
   service: ServiceItem;
@@ -15,43 +16,13 @@ interface ServiceCardProps {
 
 /**
  * [SKILL: Service Card Renderer & Dynamic Micro-Interactions]
- * Renderiza tarjetas de servicio con respuesta táctil 3D, elevación mate sin glow,
+ * Renderiza tarjetas de servicio con respuesta táctil 3D utilizando el Card base,
  * y comportamiento dinámico personalizado por cada tipo de icono.
  */
 export const ServiceCard: React.FC<ServiceCardProps> = ({ service, index }) => {
   const [isHovered, setIsHovered] = useState(false);
 
-  // Motion values para tilt 3D táctil suave
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const mouseXSpring = useSpring(x, { stiffness: 300, damping: 25 });
-  const mouseYSpring = useSpring(y, { stiffness: 300, damping: 25 });
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ['7deg', '-7deg']);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ['-7deg', '7deg']);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-
-    x.set(xPct);
-    y.set(yPct);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-    setIsHovered(false);
-  };
-
-  // Renderizador del icono con animación dinámica según el servicio
+  // Renderizador del icono con animación dinámica según el tipo de servicio
   const renderDynamicIcon = () => {
     switch (service.iconName) {
       case 'gamepad':
@@ -123,23 +94,17 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, index }) => {
         delay: 0.15 + index * 0.1,
         ease: [0.22, 1, 0.36, 1],
       }}
-      style={{ perspective: 800 }}
       className="w-full"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <motion.a
+      <Card
+        asAnchor={true}
         href={service.url}
         target="_blank"
         rel="noopener noreferrer"
-        style={{
-          rotateX,
-          rotateY,
-          transformStyle: 'preserve-3d',
-        }}
-        onMouseMove={handleMouseMove}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={handleMouseLeave}
-        whileTap={{ scale: 0.98 }}
-        className="group block relative w-full rounded-2xl bg-zinc-950 border border-zinc-800/90 hover:border-zinc-700 hover:bg-zinc-900/40 p-5 transition-all duration-200 shadow-matte-sm cursor-pointer select-none"
+        enableTilt={true}
+        className="group p-5"
       >
         <div className="flex items-center justify-between gap-4">
           {/* Lado Izquierdo: Icono dinámico en contenedor mate */}
@@ -176,7 +141,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({ service, index }) => {
             </div>
           </div>
         </div>
-      </motion.a>
+      </Card>
     </motion.div>
   );
 };

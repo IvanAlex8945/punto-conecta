@@ -1,7 +1,7 @@
 # 🧠 Project Context & Memory Hub: Punto Conecta (Centro Digital - Asunción Nochixtlán)
 
 > **Documento de Memoria a Largo Plazo y Especificación Arquitectónica**  
-> *Versión:* 1.0.0  
+> *Versión:* 2.0.0 (Refactor Arquitectura Modular Escalable React / Next.js)  
 > *Ubicación:* `project-context.md`  
 > *Objetivo:* Actuar como el "Skill" principal y memoria persistente para el agente de IA y desarrolladores en todas las sesiones presentes y futuras.
 
@@ -41,7 +41,7 @@
 | **Success / WA Indicator** | `#10b981` | `text-emerald-500` | Indicador de estado online / WhatsApp |
 
 ### 2.3 Tipografía
-- **Familia:** Sistema San-Serif ultra-legible (`system-ui`, `-apple-system`, `Inter`, `Segoe UI`, `sans-serif`).
+- **Familia:** Sistema Sans-Serif ultra-legible (`system-ui`, `-apple-system`, `Inter`, `Segoe UI`, `sans-serif`).
 - **Métricas:**
   - `Display / Hero Title`: `text-2xl` a `text-3xl` (`font-bold`, `tracking-tight`).
   - `Card Header`: `text-lg` a `text-xl` (`font-semibold`, `tracking-tight`).
@@ -54,78 +54,110 @@
 
 ### 3.1 Catálogo de Rutas Externas (Todas abren con `target="_blank" rel="noopener noreferrer"`)
 
-| ID | Servicio | Título en Tarjeta | Icono Lucide | Enlace URL |
+| ID | Servicio | Título en Tarjeta | Icono Vectorial | Enlace URL |
 | :--- | :--- | :--- | :--- | :--- |
 | `wifi-hero` | Conexión Starlink | "Wi-Fi Alta Velocidad" | `Wifi` / `Zap` | *Modal Interno de Pago* |
-| `service-gaming` | Gaming & Computadoras | "Zona Gamer y Trámites" | `Gamepad2` | `https://control-local-oaxaca.vercel.app/` |
-| `service-tactical` | Equipamiento Policial | "Uniformes y Equipo Policial" | `Shield` / `ShieldCheck` | `https://joyful-dolphin-d07913.netlify.app` |
-| `service-sports` | Deportes Locales | "Liga Municipal de Básquetbol" | `Activity` / Balón Deportivo SVG | `https://liga-nochixtlan-js.vercel.app/` |
+| `service-gaming` | Gaming & Computadoras | "Zona Gamer y Trámites" | `Gamepad2` (`/assets/gamepad.svg`) | `https://control-local-oaxaca.vercel.app/` |
+| `service-tactical` | Equipamiento Policial | "Uniformes y Equipo Policial" | `ShieldCheck` (`/assets/shield.svg`) | `https://joyful-dolphin-d07913.netlify.app` |
+| `service-sports` | Deportes Locales | "Liga Municipal de Básquetbol" | Balón SVG (`/assets/basketball.svg`) | `https://liga-nochixtlan-js.vercel.app/` |
 
-### 3.2 Datos de Configuración de Pagos y Contacto
+### 3.2 Datos de Configuración de Pagos y Contacto (En `/src/context`)
 - **Tarifa Wi-Fi:** `$50 MXN` (Acceso ilimitado todo el día).
-- **CLABE Interbancaria por Defecto:** `012 610 015489723456` (Configurable en `src/config/siteConfig.ts`).
+- **CLABE Interbancaria por Defecto:** `012 610 015489723456`.
 - **Banco / Titular:** `BBVA / Centro Digital Nochixtlán`.
-- **WhatsApp Oficial:** `+52 951 000 0000` (Enlace directo a API con mensaje predeterminado: *"Hola, acabo de transferir $50 para la clave de Wi-Fi de alta velocidad en Punto Conecta"*).
-- **Alternativa Física:** *"Pago en efectivo disponible directamente en mostrador."*
+- **WhatsApp Oficial:** `+52 951 123 4567` (Mensaje: *"Hola, acabo de transferir $50 para solicitar la clave de Wi-Fi de alta velocidad en Punto Conecta"*).
+- **Alternativa Física:** *"Pago en efectivo disponible en mostrador."*
 
 ---
 
-## 4. 🧩 Arquitectura Modular & Habilidades ("Skills") de Código
+## 4. 🏗️ Arquitectura de Carpetas Profesional & Escalable (React / Next.js)
 
-El proyecto sigue una estructura desacoplada:
+El proyecto implementa la siguiente estructura estricta y desacoplada con alias de importación `@/*`:
 
 ```
 punto-conecta/
-├── project-context.md               # [ESTE ARCHIVO] Memoria permanente y contexto
-├── index.html                       # HTML5 con viewport optimizado para móviles
-├── package.json                     # Vite + React + Tailwind + Framer Motion + Lucide
-├── tailwind.config.js               # Paleta personalizada mate, sin blur ni glow
-├── postcss.config.js
-├── vite.config.ts
-├── src/
-│   ├── main.tsx                     # Entrypoint
-│   ├── App.tsx                      # Layout principal Mobile-First
-│   ├── config/
-│   │   └── siteConfig.ts            # Fuente de verdad: Links, CLABE, WhatsApp, Precios
-│   ├── hooks/
-│   │   └── usePaymentModal.ts       # [SKILL 1]: Lógica desacoplada del modal de pago
-│   ├── components/
-│   │   ├── hero/
-│   │   │   └── WifiHeroCard.tsx     # Tarjeta principal Wi-Fi Starlink
-│   │   ├── modal/
-│   │   │   └── PaymentModal.tsx     # Modal interactivo con copiado de CLABE y enlace WA
-│   │   ├── services/
-│   │   │   ├── ServiceCard.tsx      # [SKILL 2]: Tarjeta individual con micro-animaciones
-│   │   │   └── ServicesSection.tsx  # Lista vertical de servicios del ecosistema
-│   │   ├── layout/
-│   │   │   ├── Header.tsx           # Barra superior con estado en vivo y ubicación
-│   │   │   └── Footer.tsx           # Footer minimalista oficial
-│   │   └── ui/
-│   │       ├── Badge.tsx            # Pill minimalista mate
-│   │       └── Icons.tsx            # Iconografía curada Lucide y custom basketball SVG
-│   └── styles/
-│       └── index.css                # Directivas Tailwind y reseteo táctil
+├── project-context.md                    # [ESTE ARCHIVO] Memoria permanente y contexto
+├── index.html                            # HTML5 con viewport móvil y preconnect
+├── package.json                          # Vite + React 18 + Tailwind + Framer Motion + Lucide
+├── tsconfig.json                         # Configuración TypeScript con paths "@/*": ["src/*"]
+├── vite.config.ts                        # Configuración Vite con alias "@": path.resolve("./src")
+├── tailwind.config.js                    # Paleta matte pura y sombras sin resplandor
+├── postcss.config.js                     # Tailwind + Autoprefixer
+├── vercel.json                           # Reglas de despliegue y caché estática en Vercel
+│
+├── public/
+│   └── assets/                           # [PUBLIC ASSETS]: Iconos vectoriales limpios
+│       ├── basketball.svg                # Balón de básquetbol plano de alto contraste
+│       ├── gamepad.svg                   # Control gamer vectorial
+│       ├── shield.svg                    # Escudo táctico de seguridad
+│       ├── starlink.svg                  # Conexión satelital Starlink
+│       └── whatsapp.svg                  # Icono de mensajería WhatsApp
+│
+└── src/
+    ├── main.tsx                          # Punto de entrada de la aplicación
+    ├── App.tsx                           # Layout orquestador con ProjectProvider
+    │
+    ├── components/
+    │   ├── ui/                           # [UI]: Elementos reutilizables y primitivas visuales
+    │   │   ├── Button.tsx                # Botón táctil con variantes (primary, secondary, etc.)
+    │   │   ├── Card.tsx                  # Tarjeta genérica con tilt 3D y modos div/anchor
+    │   │   ├── Badge.tsx                 # Pill de estado (online, categorías, tags)
+    │   │   ├── Divider.tsx               # Separador minimalista con etiqueta central
+    │   │   ├── Icons.tsx                 # Iconografía unificada (Lucide + vectores)
+    │   │   └── index.ts                  # Barrel export de componentes UI
+    │   │
+    │   └── features/                     # [FEATURES]: Lógica de negocio y vistas específicas
+    │       ├── wifi/
+    │       │   └── WifiHeroCard.tsx      # Lógica y tarjeta superior Starlink
+    │       ├── payment/
+    │       │   └── PaymentModal.tsx      # Modal de pago con CLABE y enlace WhatsApp
+    │       ├── services/
+    │       │   ├── ServiceCard.tsx       # Tarjeta de servicio con microinteracción de iconos
+    │       │   └── ServicesSection.tsx   # Contenedor vertical de servicios del ecosistema
+    │       ├── layout/
+    │       │   ├── Header.tsx            # Header superior con badge Starlink
+    │       │   └── Footer.tsx            # Footer oficial Nochixtlán
+    │       └── index.ts                  # Barrel export de componentes de features
+    │
+    ├── hooks/                            # [HOOKS]: Lógica reactiva y estado desacoplado
+    │   └── usePaymentModal.ts            # Hook para gestión del modal de pago (Skill 1)
+    │
+    ├── context/                          # [CONTEXT]: Memoria del proyecto y estado global
+    │   ├── types.ts                      # Tipos de datos de la memoria y servicios
+    │   ├── projectMemory.ts              # Fuente de verdad inicial persistente
+    │   └── ProjectContext.tsx            # Contexto y Provider con hook useProjectMemory
+    │
+    └── styles/                           # [STYLES]: Configuración global de Tailwind
+        ├── globals.css                   # Directivas Tailwind y estilos de base oscura
+        └── index.css                     # Importador de estilos globales
 ```
-
-### 4.1 Skill: `usePaymentModal` (Hook de Estado de Pago)
-- Gestiona:
-  - Estado `isOpen`: Booleano para visibilidad del modal.
-  - Acción `copyClabe()`: Copia al portapapeles con feedback temporal (tooltip "Copiado").
-  - Generador de enlace WhatsApp con texto preconfigurado codificado en URI.
-  - Accesibilidad: Cierre con tecla `Escape`, bloqueo de scroll de fondo y focus trap básico.
-
-### 4.2 Skill: `ServiceCard` (Tarjeta Reactiva con Animación Dinámica)
-- Renderiza tarjetas individuales con:
-  - Enlaces seguros `target="_blank"` y `rel="noopener noreferrer"`.
-  - Animación Framer Motion: Tilt 3D reactivo al puntero o toque, elevación suave sin glow.
-  - Microinteracción de icono: Rotación sutil o pulso en hover/active.
-  - Flecha indicadora de navegación externa que reacciona al toque.
 
 ---
 
-## 5. ⚙️ Reglas de Comportamiento para Futuras Sesiones
+## 5. 🧩 Habilidades ("Skills") de Componentes y Hooks
 
-1. **Lectura Obligatoria:** En cada nueva sesión de desarrollo, el agente debe verificar o releer `project-context.md` para mantener coherencia en colores, tipografía, textos y enlaces.
-2. **Preservación del Tema Mate:** Queda estrictamente prohibido introducir gradientes fluorescentes, colores RGB neón, sombras difusas de color tipo "cyberpunk" o efectos de cristal esmerilado que rompan el negro mate puro.
-3. **Optimización Mobile:** Todo nuevo componente debe diseñarse pensando primero en anchos de pantalla de `360px` a `430px`, antes de expandirse a pantallas de escritorio (`max-w-md mx-auto`).
-4. **Respeto a la Identidad Regional:** Mantener visible la referencia geográfica "Asunción Nochixtlán" para dar confianza al usuario local.
+### 5.1 Skill: `/hooks/usePaymentModal.ts`
+- Administra el estado abierto/cerrado del modal.
+- Bloquea el scroll del fondo (`body.style.overflow = 'hidden'`) mientras está activo.
+- Soporta cierre con tecla `Escape`.
+- Copiado seguro de la CLABE al portapapeles con fallback para navegadores móviles restringidos.
+- Genera el enlace directo a la API de WhatsApp con mensaje precodificado.
+
+### 5.2 Skill: `/components/features/services/ServiceCard.tsx`
+- Consume el contenedor primitivo `@/components/ui/Card`.
+- Implementa microinteracciones personalizadas por icono (`rotate`, `scale`, `bounce`).
+- Aplica efecto táctil 3D fluido mediante Framer Motion.
+- Manejo estricto de navegación en pestaña externa (`target="_blank" rel="noopener noreferrer"`).
+
+### 5.3 Skill: `/context/ProjectContext.tsx`
+- Distribuye la memoria del proyecto a todos los componentes hijos sin prop drilling.
+- Permite actualizaciones reactivas en caliente de la memoria y la configuración.
+
+---
+
+## 6. ⚙️ Reglas de Comportamiento para Futuras Sesiones
+
+1. **Lectura Obligatoria:** En cada nueva sesión de desarrollo, verificar o releer `project-context.md` para mantener coherencia en la arquitectura, paleta de colores, rutas y tipografía.
+2. **Preservación del Tema Mate:** Prohibido añadir efectos neón, gradientes brillantes o blur que rompan la estética Dark Matte sobria.
+3. **Respeto a la Arquitectura:** Nuevos componentes primitivos deben colocarse en `/components/ui`, y componentes con lógica de negocio o de dominio en `/components/features`.
+4. **Optimización Mobile:** Todo cambio debe probarse prioritariamente en viewport móvil (`max-w-md mx-auto`).

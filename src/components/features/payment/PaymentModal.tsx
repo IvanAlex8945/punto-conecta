@@ -8,8 +8,8 @@ import {
   WhatsAppIcon,
   CreditCard,
   Lock,
-} from '../ui/Icons';
-import { UsePaymentModalReturn } from '../../hooks/usePaymentModal';
+} from '@/components/ui/Icons';
+import { UsePaymentModalReturn } from '@/hooks/usePaymentModal';
 
 interface PaymentModalProps {
   modalState: UsePaymentModalReturn;

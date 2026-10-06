@@ -1,7 +1,11 @@
-import { Zap } from '../ui/Icons';
-import { SITE_CONFIG } from '../../config/siteConfig';
+import React from 'react';
+import { Zap } from '@/components/ui/Icons';
+import { Badge } from '@/components/ui/Badge';
+import { useProjectMemory } from '@/context/ProjectContext';
 
 export const Header: React.FC = () => {
+  const { memory } = useProjectMemory();
+
   return (
     <header className="w-full py-4 flex items-center justify-between border-b border-zinc-900 mb-6">
       <div className="flex items-center space-x-2.5">
@@ -10,19 +14,18 @@ export const Header: React.FC = () => {
         </div>
         <div>
           <h1 className="text-sm font-bold tracking-tight text-white uppercase">
-            {SITE_CONFIG.name}
+            {memory.name}
           </h1>
           <p className="text-[10px] text-zinc-400 font-medium">
-            {SITE_CONFIG.location}
+            {memory.location}
           </p>
         </div>
       </div>
 
       {/* Online indicator */}
-      <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-zinc-950 border border-zinc-850">
-        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-        <span className="text-[11px] font-mono text-zinc-400">Starlink Online</span>
-      </div>
+      <Badge dot={true} variant="outline" className="font-mono text-[11px]">
+        Starlink Online
+      </Badge>
     </header>
   );
 };

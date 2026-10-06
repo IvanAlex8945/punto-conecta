@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
-import { SITE_CONFIG } from '../config/siteConfig';
+import { PaymentModalConfig } from '@/context/types';
+import { INITIAL_PROJECT_MEMORY } from '@/context/projectMemory';
 
 export interface UsePaymentModalReturn {
   isOpen: boolean;
@@ -8,20 +9,19 @@ export interface UsePaymentModalReturn {
   closeModal: () => void;
   copyClabe: () => Promise<boolean>;
   getWhatsAppUrl: () => string;
-  config: typeof SITE_CONFIG.paymentModal;
+  config: PaymentModalConfig;
 }
 
 /**
  * [SKILL: Payment Modal State Management]
- * Custom hook para la orquestación desacoplada del modal de pago de Wi-Fi.
- * Administra apertura, cierre, copiado seguro de CLABE con fallback para móviles
- * y generación de enlaces directos a WhatsApp.
+ * Hook desacoplado para la orquestación del estado del modal de pago de Wi-Fi.
+ * Administra apertura, cierre, copiado de CLABE con fallback móvil y enlace directo a WhatsApp.
  */
-export function usePaymentModal(): UsePaymentModalReturn {
+export function usePaymentModal(customConfig?: PaymentModalConfig): UsePaymentModalReturn {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isCopied, setIsCopied] = useState<boolean>(false);
 
-  const config = SITE_CONFIG.paymentModal;
+  const config = customConfig || INITIAL_PROJECT_MEMORY.paymentModal;
 
   const openModal = useCallback(() => {
     setIsOpen(true);
@@ -55,16 +55,14 @@ export function usePaymentModal(): UsePaymentModalReturn {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, closeModal]);
 
-  // Copiado seguro al portapapeles con compatibilidad móvil
+  // Copiado seguro al portapapeles con compatibilidad para navegadores móviles
   const copyClabe = useCallback(async (): Promise<boolean> => {
-    // Limpiamos espacios para el copiado real bancario
     const cleanClabe = config.clabe.replace(/\s+/g, '');
     
     try {
       if (navigator.clipboard && window.isSecureContext) {
         await navigator.clipboard.writeText(cleanClabe);
       } else {
-        // Fallback para entornos donde clipboard API no esté disponible
         const textArea = document.createElement('textarea');
         textArea.value = cleanClabe;
         textArea.style.position = 'fixed';
