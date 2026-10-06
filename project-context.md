@@ -112,7 +112,12 @@ punto-conecta/
     │       ├── payment/
     │       │   └── PaymentModal.tsx      # Modal de pago con CLABE y enlace WhatsApp
     │       ├── services/
-    │       │   ├── ServiceCard.tsx       # Tarjeta de servicio con microinteracción de iconos
+    │       │   ├── icons/                # Iconos multicapa Claymorphic / 3D
+    │       │   │   ├── GamerController3D.tsx  # Físicas de flotación y rotación en Z
+    │       │   │   ├── TacticalShield3D.tsx   # Acabado metálico y barrido de luz (Glint)
+    │       │   │   ├── Basketball3D.tsx       # Rebote gravitatorio y squash & stretch
+    │       │   │   └── index.ts
+    │       │   ├── ServiceCard.tsx       # Tarjeta con bordes luminosos y físicas 3D
     │       │   └── ServicesSection.tsx   # Contenedor vertical de servicios del ecosistema
     │       ├── layout/
     │       │   ├── Header.tsx            # Header superior con badge Starlink
@@ -143,11 +148,17 @@ punto-conecta/
 - Copiado seguro de la CLABE al portapapeles con fallback para navegadores móviles restringidos.
 - Genera el enlace directo a la API de WhatsApp con mensaje precodificado.
 
-### 5.2 Skill: `/components/features/services/ServiceCard.tsx`
-- Consume el contenedor primitivo `@/components/ui/Card`.
-- Implementa microinteracciones personalizadas por icono (`rotate`, `scale`, `bounce`).
-- Aplica efecto táctil 3D fluido mediante Framer Motion.
-- Manejo estricto de navegación en pestaña externa (`target="_blank" rel="noopener noreferrer"`).
+### 5.2 Skill: `/components/features/services/ServiceCard.tsx` (Motion Graphics & Pseudo-3D)
+- **Tarjeta 1 (Zona Gamer):**
+  - Ambiental: Flotación suave continua en Y (`y: [-2, 2, -2]`, `duration: 3s`).
+  - Interacción (Hover/Tap): Rotación Z rápida (`rotate: [0, -15, 15, -8, 6, 0]`), `scale: 1.1`, iluminación de borde morado (`#a855f7`) y sombra neón violeta inferior.
+- **Tarjeta 2 (Equipamiento Policial):**
+  - Ambiental: Aspecto metálico estático con biseles cromados de acero.
+  - Interacción (Hover/Tap): Escala frontal (`scale: 1.15`), iluminación de borde azul táctico (`#3b82f6`) y barrido de destello de luz (*Shine/Glint*) animado de -100% a 130% con `overflow-hidden`.
+- **Tarjeta 3 (Deportes / Básquetbol):**
+  - Ambiental: Rotación continua ambiental en 360°.
+  - Interacción (Hover/Tap): Rebote gravitatorio (`easeOut` ascendente, `easeIn` descendente), compresión y expansión física al impactar el suelo (`scaleY: 0.8`, `scaleX: 1.12`), sombra de impacto y borde iluminado en naranja deportivo (`#f97316`).
+- **Soporte táctil móvil:** Gestos unificados con `whileHover` (escritorio) y `whileTap` / `onTouchStart` (móvil táctil).
 
 ### 5.3 Skill: `/context/ProjectContext.tsx`
 - Distribuye la memoria del proyecto a todos los componentes hijos sin prop drilling.
@@ -158,6 +169,6 @@ punto-conecta/
 ## 6. ⚙️ Reglas de Comportamiento para Futuras Sesiones
 
 1. **Lectura Obligatoria:** En cada nueva sesión de desarrollo, verificar o releer `project-context.md` para mantener coherencia en la arquitectura, paleta de colores, rutas y tipografía.
-2. **Preservación del Tema Mate:** Prohibido añadir efectos neón, gradientes brillantes o blur que rompan la estética Dark Matte sobria.
+2. **Preservación del Tema Mate con Acentos Reactivos:** Mantener el fondo negro mate puro; las iluminaciones temáticas solo se activan sutilmente en bordes al interactuar con las tarjetas.
 3. **Respeto a la Arquitectura:** Nuevos componentes primitivos deben colocarse en `/components/ui`, y componentes con lógica de negocio o de dominio en `/components/features`.
-4. **Optimización Mobile:** Todo cambio debe probarse prioritariamente en viewport móvil (`max-w-md mx-auto`).
+4. **Optimización Mobile:** Todo cambio debe probarse prioritariamente en viewport móvil (`max-w-md mx-auto`) con respuesta al toque.
