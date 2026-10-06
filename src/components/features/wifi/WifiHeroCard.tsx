@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Zap, ArrowRight } from '@/components/ui/Icons';
+import { Zap, ArrowRight, MapPin } from '@/components/ui/Icons';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 import { useProjectMemory } from '@/context/ProjectContext';
@@ -94,6 +94,14 @@ export const WifiHeroCard: React.FC<WifiHeroCardProps> = ({ onOpenModal }) => {
             <div className="text-[11px] text-zinc-400 uppercase tracking-wider font-semibold">Dispositivos</div>
             <div className="text-xs font-bold text-zinc-200 mt-0.5">Ilimitado</div>
           </div>
+        </div>
+
+        {/* Aviso de Cobertura Local (Soft Alert) */}
+        <div className="mb-4 px-3 py-2 rounded-xl bg-black/60 border border-white/5 flex items-center justify-center gap-1.5 text-center">
+          <MapPin className="w-3.5 h-3.5 text-zinc-400 flex-shrink-0" />
+          <span className="text-xs text-zinc-400 font-medium">
+            📍 Cobertura exclusiva en el local y 20m a la redonda.
+          </span>
         </div>
 
         {/* Action Bottom Section */}

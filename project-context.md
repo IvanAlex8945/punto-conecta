@@ -160,9 +160,10 @@ punto-conecta/
   - Previene doble clic y fallas de navegación móvil.
   - Al pulsar (`whileTap={{ scale: 0.95 }}`), se ejecuta `e.preventDefault()`, se activa la animación de impacto físico por 400ms y posteriormente se ejecuta `window.open(url, '_blank')`.
 
-### 5.3 Skill: `/components/features/wifi/WifiIcon3D.tsx` & `WifiHeroCard.tsx` (Wi-Fi Out of Bounds 3D)
+### 5.3 Skill: `/components/features/wifi/WifiIcon3D.tsx` & `WifiHeroCard.tsx` (Wi-Fi Out of Bounds 3D & Cobertura Local)
 - Ícono Wi-Fi estilo Claymorphic 3D en posición `absolute -top-7 -left-3 sm:-top-8 sm:-left-5` rompiendo el contenedor principal.
 - Animación secuencial infinita "Buscando señal Starlink" que enciende cíclicamente las ondas (Punto -> Onda 1 -> Onda 2 -> Onda 3) en bucle perpetuo con pulso cian/esmeralda.
+- **Aviso de Cobertura Local (Soft Alert):** Fila sutil en `bg-black/60 border border-white/5` con ícono `MapPin` y texto `"📍 Cobertura exclusiva en el local y 20m a la redonda."` en `text-xs text-zinc-400`.
 
 ### 5.4 Skill: `/context/ProjectContext.tsx`
 - Distribuye la memoria del proyecto a todos los componentes hijos sin prop drilling.

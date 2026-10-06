@@ -16,6 +16,7 @@ import {
   CreditCard,
   Building2,
   Lock,
+  MapPin,
 } from 'lucide-react';
 
 // Custom clean vector basketball icon (minimalist high-contrast SVG)
@@ -84,4 +85,5 @@ export {
   CreditCard,
   Building2,
   Lock,
+  MapPin,
 };
