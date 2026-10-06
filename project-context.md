@@ -148,19 +148,19 @@ punto-conecta/
 - Copiado seguro de la CLABE al portapapeles con fallback para navegadores móviles restringidos.
 - Genera el enlace directo a la API de WhatsApp con mensaje precodificado.
 
-### 5.2 Skill: `/components/features/services/ServiceCard.tsx` (Motion Graphics & Pseudo-3D)
-- **Tarjeta 1 (Zona Gamer):**
-  - Ambiental: Flotación suave continua en Y (`y: [-2, 2, -2]`, `duration: 3s`).
-  - Interacción (Hover/Tap): Rotación Z rápida (`rotate: [0, -15, 15, -8, 6, 0]`), `scale: 1.1`, iluminación de borde morado (`#a855f7`) y sombra neón violeta inferior.
-- **Tarjeta 2 (Equipamiento Policial):**
-  - Ambiental: Aspecto metálico estático con biseles cromados de acero.
-  - Interacción (Hover/Tap): Escala frontal (`scale: 1.15`), iluminación de borde azul táctico (`#3b82f6`) y barrido de destello de luz (*Shine/Glint*) animado de -100% a 130% con `overflow-hidden`.
-- **Tarjeta 3 (Deportes / Básquetbol):**
-  - Ambiental: Rotación continua ambiental en 360°.
-  - Interacción (Hover/Tap): Rebote gravitatorio (`easeOut` ascendente, `easeIn` descendente), compresión y expansión física al impactar el suelo (`scaleY: 0.8`, `scaleX: 1.12`), sombra de impacto y borde iluminado en naranja deportivo (`#f97316`).
-- **Soporte táctil móvil:** Gestos unificados con `whileHover` (escritorio) y `whileTap` / `onTouchStart` (móvil táctil).
+### 5.2 Skill: `/components/features/services/ServiceCard.tsx` (Out of Bounds UI & Text Relieve 3D)
+- **Diseño Out of Bounds:** Se eliminaron los contenedores cuadrados interiores. Los íconos 3D (+40% de tamaño) tienen `position: absolute` y sobresalen del borde superior izquierdo (`-top-7 -left-3 sm:-top-8 sm:-left-5`), con `overflow-visible` y levitación constante.
+- **Texto 3D Flotante con Presión Mecánica:** Los títulos usan capas sólidas apiladas de `text-shadow` hacia abajo a la derecha (`1px 1px 0 #27272a, 2px 2px 0 #18181b, 3px 3px 0 #09090b, 4px 5px 8px rgba(0,0,0,0.9)`). Al interactuar (`:hover` o `whileTap`), el texto se comprime físicamente (`translate(1.5px, 1.5px)` y sombra compacta) simulando la presión de una tecla o botón 3D.
+- **Físicas Pseudo-3D:**
+  - **Tarjeta 1 (Zona Gamer):** Levitación Y constante, rotación Z rápida tipo volante (-16° a 16°) y sombra neón morada inferior.
+  - **Tarjeta 2 (Equipamiento Policial):** Levitación Y, escala frontal a 1.15x y barrido de destello de luz metálica (*Shine/Glint*).
+  - **Tarjeta 3 (Deportes / Básquetbol):** Levitación Y, rotación continua y rebote gravitatorio con deformación física *Squash & Stretch* (`scaleY: 0.8`, `scaleX: 1.14`).
 
-### 5.3 Skill: `/context/ProjectContext.tsx`
+### 5.3 Skill: `/components/features/wifi/WifiSignal3D.tsx` (Starlink Sequential Search)
+- SVG multicapa dividido en punto base y 3 ondas concéntricas.
+- Animación secuencial en bucle que incrementa la opacidad de 0.2 a 1.0 (Punto -> Onda 1 -> Onda 2 -> Onda 3) simulando la irradiación y búsqueda del satélite Starlink.
+
+### 5.4 Skill: `/context/ProjectContext.tsx`
 - Distribuye la memoria del proyecto a todos los componentes hijos sin prop drilling.
 - Permite actualizaciones reactivas en caliente de la memoria y la configuración.
 

@@ -3,20 +3,24 @@ import { motion } from 'framer-motion';
 
 interface Basketball3DProps {
   isActive: boolean;
+  className?: string;
 }
 
-export const Basketball3D: React.FC<Basketball3DProps> = ({ isActive }) => {
+export const Basketball3D: React.FC<Basketball3DProps> = ({
+  isActive,
+  className = "w-20 h-20 sm:w-22 sm:h-22",
+}) => {
   return (
-    <div className="relative w-14 h-14 flex items-center justify-center select-none">
-      {/* Sombra de suelo reactiva al rebote (se encoge al subir y se expande en el impacto) */}
+    <div className={`relative flex items-center justify-center select-none ${className}`}>
+      {/* Sombra de suelo reactiva al rebote */}
       <motion.div
         animate={
           isActive
             ? {
-                scaleX: [1, 0.55, 1.25, 0.7, 1],
-                scaleY: [1, 0.5, 1.15, 0.6, 1],
-                opacity: [0.3, 0.12, 0.75, 0.2, 0.3],
-                filter: ['blur(4px)', 'blur(6px)', 'blur(3px)', 'blur(5px)', 'blur(4px)'],
+                scaleX: [1, 0.55, 1.3, 0.7, 1],
+                scaleY: [1, 0.5, 1.2, 0.6, 1],
+                opacity: [0.35, 0.12, 0.85, 0.2, 0.35],
+                filter: ['blur(5px)', 'blur(7px)', 'blur(3px)', 'blur(6px)', 'blur(5px)'],
                 transition: {
                   duration: 0.9,
                   times: [0, 0.3, 0.55, 0.75, 1],
@@ -24,24 +28,28 @@ export const Basketball3D: React.FC<Basketball3DProps> = ({ isActive }) => {
                 },
               }
             : {
-                scaleX: 1,
-                scaleY: 1,
-                opacity: 0.3,
-                filter: 'blur(4px)',
-                transition: { duration: 0.3 },
+                scaleX: [1, 0.85, 1],
+                scaleY: [1, 0.85, 1],
+                opacity: [0.35, 0.22, 0.35],
+                filter: 'blur(5px)',
+                transition: {
+                  repeat: Infinity,
+                  duration: 3.5,
+                  ease: 'easeInOut',
+                },
               }
         }
-        className="absolute -bottom-1 w-10 h-2.5 bg-orange-600 rounded-full pointer-events-none"
+        className="absolute -bottom-2 w-14 h-3.5 bg-orange-600 rounded-full pointer-events-none"
       />
 
-      {/* Contenedor de rebote vertical con simulación de gravedad y squash & stretch */}
+      {/* Rebote vertical gravitatorio + Squash & Stretch */}
       <motion.div
         animate={
           isActive
             ? {
-                y: [0, -22, 0, -9, 0],
+                y: [0, -25, 0, -10, 0],
                 scaleY: [1, 1, 0.8, 1, 0.92, 1],
-                scaleX: [1, 0.96, 1.12, 0.98, 1.05, 1],
+                scaleX: [1, 0.95, 1.14, 0.98, 1.05, 1],
                 transition: {
                   y: {
                     duration: 0.9,
@@ -61,13 +69,21 @@ export const Basketball3D: React.FC<Basketball3DProps> = ({ isActive }) => {
                 },
               }
             : {
-                y: 0,
+                y: [-4, 4, -4],
                 scaleY: 1,
                 scaleX: 1,
-                transition: { duration: 0.3, ease: 'easeOut' },
+                transition: {
+                  y: {
+                    repeat: Infinity,
+                    duration: 3.5,
+                    ease: 'easeInOut',
+                  },
+                  scaleY: { duration: 0.3 },
+                  scaleX: { duration: 0.3 },
+                },
               }
         }
-        className="relative w-12 h-12 flex items-center justify-center"
+        className="relative w-full h-full flex items-center justify-center filter drop-shadow-[0_14px_20px_rgba(0,0,0,0.92)] drop-shadow-[0_4px_6px_rgba(0,0,0,0.85)]"
       >
         {/* Contenedor de rotación continua ambiental */}
         <motion.div
@@ -90,12 +106,12 @@ export const Basketball3D: React.FC<Basketball3DProps> = ({ isActive }) => {
         >
           <svg
             viewBox="0 0 54 54"
-            className="w-full h-full drop-shadow-[0_6px_8px_rgba(0,0,0,0.85)] filter"
+            className="w-full h-full"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
           >
             <defs>
-              {/* Esfera 3D: Gradiente radial con punto de luz desplazado a (32%, 30%) */}
+              {/* Esfera 3D: Gradiente radial con punto de luz */}
               <radialGradient
                 id="ballSphereGrad"
                 cx="32%"
@@ -119,7 +135,7 @@ export const Basketball3D: React.FC<Basketball3DProps> = ({ isActive }) => {
 
               {/* Brillo especular superior */}
               <linearGradient id="ballHighlight" x1="16" y1="6" x2="28" y2="24" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#ffffff" stopOpacity="0.45" />
+                <stop offset="0%" stopColor="#ffffff" stopOpacity="0.5" />
                 <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
               </linearGradient>
 
@@ -132,7 +148,7 @@ export const Basketball3D: React.FC<Basketball3DProps> = ({ isActive }) => {
             {/* Sombra base profunda */}
             <circle cx="27" cy="27" r="23" fill="#431407" />
 
-            {/* Esfera principal 3D con volumen de cuero texturizado */}
+            {/* Esfera principal 3D */}
             <circle
               cx="27"
               cy="27"
@@ -145,18 +161,11 @@ export const Basketball3D: React.FC<Basketball3DProps> = ({ isActive }) => {
             {/* Oclusión de borde esférico */}
             <circle cx="27" cy="27" r="22.5" fill="url(#ballRimShadow)" />
 
-            {/* COSTURAS CLÁSICAS DE BÁSQUETBOL (Acanaladas con relieve) */}
+            {/* COSTURAS CLÁSICAS DE BÁSQUETBOL */}
             <g filter="url(#seamRelief)" stroke="#1c1917" strokeWidth="1.8" strokeLinecap="round">
-              {/* Costura horizontal transversal */}
               <path d="M4.8 27H49.2" />
-
-              {/* Costura vertical */}
               <path d="M27 4.8V49.2" />
-
-              {/* Costura curva izquierda */}
               <path d="M11 11C20.5 19 20.5 35 11 43" />
-
-              {/* Costura curva derecha */}
               <path d="M43 11C33.5 19 33.5 35 43 43" />
             </g>
 
@@ -168,7 +177,7 @@ export const Basketball3D: React.FC<Basketball3DProps> = ({ isActive }) => {
               <path d="M42.5 11.5C33 19.5 33 34.5 42.5 42.5" />
             </g>
 
-            {/* Brillo especular en el domo superior para volumen 3D */}
+            {/* Brillo especular en el domo superior */}
             <ellipse cx="20" cy="14" rx="8" ry="4.5" fill="url(#ballHighlight)" transform="rotate(-20 20 14)" />
           </svg>
         </motion.div>
